@@ -27,9 +27,7 @@ class LoginPage extends StatelessWidget {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Color.fromARGB(
-                            255, 0, 0, 0)), // Cor do contorno quando focado
+                    borderSide: BorderSide(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
                   hintText: 'Digite seu e-mail',
                 ),
@@ -45,9 +43,7 @@ class LoginPage extends StatelessWidget {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: Color.fromARGB(
-                            255, 0, 0, 0)), // Cor do contorno quando focado
+                    borderSide: BorderSide(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
                   hintText: 'Digite sua senha',
                 ),
@@ -60,8 +56,7 @@ class LoginPage extends StatelessWidget {
                   login(context, email, password);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(
-                      255, 41, 42, 43), // Cor do fundo do botão
+                  backgroundColor: const Color.fromARGB(255, 41, 42, 43),
                 ),
                 child: const Text(
                   'ENTRAR',
@@ -93,7 +88,9 @@ class LoginPage extends StatelessWidget {
         final userName = responseData['profile']['name'];
 
         final prefs = await SharedPreferences.getInstance();
+        final expiryDate = DateTime.now().add(const Duration(hours: 3));
         await prefs.setString('jwt_token', token);
+        await prefs.setString('expiry_date', expiryDate.toIso8601String());
         await prefs.setString('user_name', userName);
 
         Navigator.pushReplacement(

@@ -1,5 +1,4 @@
 import 'package:app/models/alert.dart';
-import 'package:app/models/analysis.dart';
 import 'package:app/pages/view_alert.dart';
 import 'package:app/pages/view_all_alerts.dart';
 import 'package:app/pages/view_all_analyses.dart';

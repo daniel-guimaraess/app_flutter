@@ -78,7 +78,7 @@ class AlertRepository extends ChangeNotifier {
         Uri.parse(url),
         headers: {'Authorization': 'Bearer $_token'},
       );
-      print(response.body);
+
       if (response.statusCode == 200) {
         final List<dynamic> json = jsonDecode(response.body);
         _lastAlerts = json.map((alertJson) {

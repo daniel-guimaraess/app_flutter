@@ -1,5 +1,4 @@
-import 'package:app/pages/home.dart';
-import 'package:app/pages/login.dart';
+import 'package:app/pages/splash.dart';
 import 'package:app/repositories/alert_repository.dart';
 import 'package:app/repositories/analysis_repository.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Roboto'),
-      home: const HomePage(),
+      home: const SplashPage(),
     );
   }
 }
