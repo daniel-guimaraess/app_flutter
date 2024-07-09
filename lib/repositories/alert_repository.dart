@@ -25,6 +25,12 @@ class AlertRepository extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
+  checkAlerts() async {
+    await _getAllAlerts();
+    await _getLastAlerts();
+    await _getCountAlerts();
+  }
+
   _getAllAlerts() async {
     String url = 'http://192.168.15.4/api/alerts';
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -61,11 +67,6 @@ class AlertRepository extends ChangeNotifier {
     }
   }
 
-  checkAlerts() async {
-    await _getLastAlerts();
-    await _getCountAlerts();
-  }
-
   _getLastAlerts() async {
     String url = 'http://192.168.15.4/api/lastalerts';
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -77,7 +78,7 @@ class AlertRepository extends ChangeNotifier {
         Uri.parse(url),
         headers: {'Authorization': 'Bearer $_token'},
       );
-
+      print(response.body);
       if (response.statusCode == 200) {
         final List<dynamic> json = jsonDecode(response.body);
         _lastAlerts = json.map((alertJson) {

@@ -2,6 +2,7 @@ import 'package:app/models/analysis.dart';
 import 'package:app/pages/view_analysis.dart';
 import 'package:app/repositories/analysis_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ViewAllAnalyses extends StatefulWidget {
   const ViewAllAnalyses({super.key});
@@ -11,6 +12,9 @@ class ViewAllAnalyses extends StatefulWidget {
 }
 
 class _ViewAllAnalysesState extends State<ViewAllAnalyses> {
+  late List<Analysis> allAnalyses;
+  late AnalysisRepository analyses;
+
   viewAnalysis(Analysis analysis) {
     Navigator.push(
       context,
@@ -24,7 +28,8 @@ class _ViewAllAnalysesState extends State<ViewAllAnalyses> {
 
   @override
   Widget build(BuildContext context) {
-    final table = AnalysisRepository.table;
+    analyses = context.watch<AnalysisRepository>();
+    allAnalyses = analyses.allAnalyses;
 
     return Scaffold(
       appBar: AppBar(
@@ -35,26 +40,29 @@ class _ViewAllAnalysesState extends State<ViewAllAnalyses> {
         ),
         backgroundColor: const Color.fromARGB(255, 243, 242, 242),
       ),
-      body: ListView.separated(
-          itemBuilder: (BuildContext context, int analysis) {
-            return ListTile(
-              leading: SizedBox(
-                width: 45,
-                height: 40,
-                child: Image.asset('images/icons/google-gemini-icon.png'),
-              ),
-              title: Text(
-                table[analysis].analysis,
-                style: const TextStyle(fontSize: 14),
-              ),
-              trailing: Text(table[analysis].date),
-              onTap: () => viewAnalysis(table[analysis]),
-            );
-          },
-          separatorBuilder: (_, __) => const Divider(
-                height: 10,
-              ),
-          itemCount: 5),
+      body: RefreshIndicator(
+        onRefresh: () => analyses.checkAnalyses(),
+        child: ListView.separated(
+            itemBuilder: (BuildContext context, int analysis) {
+              return ListTile(
+                leading: SizedBox(
+                  width: 45,
+                  height: 40,
+                  child: Image.asset('images/icons/google-gemini-icon.png'),
+                ),
+                title: Text(
+                  allAnalyses[analysis].analysis,
+                  style: const TextStyle(fontSize: 14),
+                ),
+                trailing: Text(allAnalyses[analysis].date),
+                onTap: () => viewAnalysis(allAnalyses[analysis]),
+              );
+            },
+            separatorBuilder: (_, __) => const Divider(
+                  height: 10,
+                ),
+            itemCount: allAnalyses.length),
+      ),
       backgroundColor: const Color.fromARGB(255, 243, 242, 242),
     );
   }

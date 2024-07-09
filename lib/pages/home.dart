@@ -1,8 +1,10 @@
 import 'package:app/models/alert.dart';
+import 'package:app/models/analysis.dart';
 import 'package:app/pages/view_alert.dart';
 import 'package:app/pages/view_all_alerts.dart';
 import 'package:app/pages/view_all_analyses.dart';
 import 'package:app/repositories/alert_repository.dart';
+import 'package:app/repositories/analysis_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +19,8 @@ class _HomePageState extends State<HomePage> {
   late List<Alert> lastAlerts;
   late AlertRepository alerts;
   int? countAlertsToday;
+  late AnalysisRepository analyses;
+  int? countAnalysesToday;
 
   viewAlert(Alert alert) {
     Navigator.push(
@@ -50,6 +54,8 @@ class _HomePageState extends State<HomePage> {
     alerts = context.watch<AlertRepository>();
     lastAlerts = alerts.lastAlerts;
     countAlertsToday = alerts.countAlertsToday;
+    analyses = context.watch<AnalysisRepository>();
+    countAnalysesToday = analyses.countAnalysesToday;
 
     return Scaffold(
       appBar: AppBar(
@@ -64,7 +70,11 @@ class _HomePageState extends State<HomePage> {
         elevation: 0.0,
       ),
       body: RefreshIndicator(
-        onRefresh: () => alerts.checkAlerts(),
+        onRefresh: () {
+          alerts.checkAlerts();
+          analyses.checkAnalyses();
+          return Future.value();
+        },
         color: Colors.black,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -117,20 +127,20 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           'Análises hoje',
                           style: TextStyle(
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
-                          '0',
-                          style: TextStyle(
+                          countAnalysesToday?.toString() ?? 'Falha',
+                          style: const TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
                           ),
