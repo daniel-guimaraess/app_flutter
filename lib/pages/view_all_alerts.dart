@@ -1,5 +1,4 @@
 import 'package:app/models/alert.dart';
-import 'package:app/pages/view_alert.dart';
 import 'package:app/repositories/alert_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,14 +14,59 @@ class _ViewAllAlertsState extends State<ViewAllAlerts> {
   late List<Alert> allAlerts;
   late AlertRepository alerts;
 
-  viewAlert(Alert alert) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ViewAlert(
-          alert: alert,
-        ),
+  void viewAlert(Alert alert) {
+    showModalBottomSheet<void>(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
       ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(5.0),
+          color: const Color.fromARGB(255, 243, 242, 242),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 250,
+                width: double.infinity,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    alert.img,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Alerta: ${alert.detection}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Nível de confiança do alerta: ${alert.confidence}%',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Data: ${alert.date}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

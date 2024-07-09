@@ -24,12 +24,12 @@ class _ViewAlertState extends State<ViewAlert> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(0),
             child: SizedBox(
               height: 250,
               width: double.infinity,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
+                //borderRadius: BorderRadius.circular(20),
                 child: Image.network(
                   widget.alert.img,
                   fit: BoxFit.cover,
@@ -78,7 +78,7 @@ class _ViewAlertState extends State<ViewAlert> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Horário: ${widget.alert.date}',
+                    'Hora: ${widget.alert.date}',
                     style: const TextStyle(
                       fontSize: 18,
                       color: Colors.black87,

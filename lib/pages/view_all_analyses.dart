@@ -42,6 +42,7 @@ class _ViewAllAnalysesState extends State<ViewAllAnalyses> {
       ),
       body: RefreshIndicator(
         onRefresh: () => analyses.checkAnalyses(),
+        color: Colors.black,
         child: ListView.separated(
             itemBuilder: (BuildContext context, int analysis) {
               return ListTile(
