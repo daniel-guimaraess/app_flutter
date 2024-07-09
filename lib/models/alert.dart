@@ -1,11 +1,13 @@
 class Alert {
+  int id;
   String type;
   String detection;
-  double confidence;
+  num confidence;
   String img;
   String date;
 
   Alert({
+    required this.id,
     required this.type,
     required this.detection,
     required this.confidence,

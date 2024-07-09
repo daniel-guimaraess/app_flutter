@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +26,11 @@ class LoginPage extends StatelessWidget {
                 },
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Color.fromARGB(
+                            255, 0, 0, 0)), // Cor do contorno quando focado
+                  ),
                   hintText: 'Digite seu e-mail',
                 ),
               ),
@@ -39,6 +44,11 @@ class LoginPage extends StatelessWidget {
                 obscureText: true,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Color.fromARGB(
+                            255, 0, 0, 0)), // Cor do contorno quando focado
+                  ),
                   hintText: 'Digite sua senha',
                 ),
               ),
@@ -49,12 +59,20 @@ class LoginPage extends StatelessWidget {
                 onPressed: () {
                   login(context, email, password);
                 },
-                child: const Text('ENTRAR'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(
+                      255, 41, 42, 43), // Cor do fundo do botão
+                ),
+                child: const Text(
+                  'ENTRAR',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
         ),
       ),
+      backgroundColor: const Color.fromARGB(255, 243, 242, 242),
     );
   }
 
@@ -77,20 +95,20 @@ class LoginPage extends StatelessWidget {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('jwt_token', token);
         await prefs.setString('user_name', userName);
-        print('Logado com sucesso! Token: $token');
 
         Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       } else {
-        print('Falha no login: ${response.body}');
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Falha ao realizar login')),
         );
       }
     } catch (e) {
-      print('Erro ao realizar login: $e');
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Erro de conexão')),
       );
