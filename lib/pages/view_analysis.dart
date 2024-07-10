@@ -17,9 +17,13 @@ class _ViewAnalysisState extends State<ViewAnalysis> {
       appBar: AppBar(
         title: const Text(
           'Detalhes da análise',
-          style: TextStyle(fontSize: 16, color: Colors.black),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+            fontSize: 18,
+          ),
         ),
-        backgroundColor: const Color.fromARGB(255, 243, 242, 242),
+        backgroundColor: const Color(0xff359ac6),
       ),
       body: Container(
         alignment: Alignment.topLeft,
@@ -39,7 +43,7 @@ class _ViewAnalysisState extends State<ViewAnalysis> {
           ),
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 243, 242, 242),
+      backgroundColor: Colors.white,
     );
   }
 }

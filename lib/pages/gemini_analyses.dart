@@ -18,12 +18,8 @@ class _GeminiAnalysesState extends State<GeminiAnalyses> {
   }
 
   Future<String> fetchGeminiAnalysis() async {
-    try {
-      String analysis = await GeminiService().fetchAnalysis();
-      return analysis;
-    } catch (e) {
-      throw Exception('Erro ao buscar análise do Gemini');
-    }
+    String analysis = await GeminiService().fetchAnalysis();
+    return analysis;
   }
 
   @override
@@ -32,10 +28,14 @@ class _GeminiAnalysesState extends State<GeminiAnalyses> {
       appBar: AppBar(
         title: const Text(
           'Análise Gemini',
-          style: TextStyle(fontSize: 16, color: Colors.black),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+            fontSize: 18,
+          ),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 243, 242, 242),
+        backgroundColor: const Color(0xff359ac6),
       ),
       body: Container(
         alignment: Alignment.topLeft,
@@ -45,11 +45,13 @@ class _GeminiAnalysesState extends State<GeminiAnalyses> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: Color(0xff359ac6),
+                ),
               );
             } else if (snapshot.hasError) {
-              return const Center(
-                child: Text('Erro ao carregar análise'),
+              return Center(
+                child: Text('Erro: ${snapshot.error}'),
               );
             } else {
               return SingleChildScrollView(
@@ -64,7 +66,7 @@ class _GeminiAnalysesState extends State<GeminiAnalyses> {
           },
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 243, 242, 242),
+      backgroundColor: Colors.white,
     );
   }
 }

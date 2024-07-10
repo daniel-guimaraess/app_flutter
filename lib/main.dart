@@ -1,16 +1,17 @@
+import 'package:app/pages/home.dart';
 import 'package:app/pages/splash.dart';
 import 'package:app/repositories/alert_repository.dart';
 import 'package:app/repositories/analysis_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: '.env');
 
-  final apiKey = const String.fromEnvironment('API_KEY_GEMINI');
-
-  Gemini.init(apiKey: apiKey);
+  Gemini.init(apiKey: dotenv.env['API_KEY_GEMINI'] ?? '');
 
   runApp(
     MultiProvider(

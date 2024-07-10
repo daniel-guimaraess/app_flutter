@@ -36,34 +36,41 @@ class _ViewAllAnalysesState extends State<ViewAllAnalyses> {
         centerTitle: true,
         title: const Text(
           'Análises',
-          style: TextStyle(color: Colors.black, fontSize: 16),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+            fontSize: 18,
+          ),
         ),
-        backgroundColor: const Color.fromARGB(255, 243, 242, 242),
+        backgroundColor: const Color(0xff359ac6),
       ),
       body: RefreshIndicator(
         onRefresh: () => analyses.checkAnalyses(),
         color: Colors.black,
-        child: ListView.separated(
-            itemBuilder: (BuildContext context, int analysis) {
-              return ListTile(
-                leading: SizedBox(
-                  width: 45,
-                  height: 40,
-                  child: Image.asset('images/icons/google-gemini-icon.png'),
-                ),
-                title: Text(
-                  allAnalyses[analysis].date,
-                  style: const TextStyle(fontSize: 14),
-                ),
-                onTap: () => viewAnalysis(allAnalyses[analysis]),
-              );
-            },
-            separatorBuilder: (_, __) => const Divider(
-                  height: 10,
-                ),
-            itemCount: allAnalyses.length),
+        child: Container(
+          margin: const EdgeInsets.only(top: 15.0),
+          child: ListView.separated(
+              itemBuilder: (BuildContext context, int analysis) {
+                return ListTile(
+                  leading: SizedBox(
+                    width: 45,
+                    height: 40,
+                    child: Image.asset('images/icons/google-gemini-icon.png'),
+                  ),
+                  title: Text(
+                    allAnalyses[analysis].date,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  onTap: () => viewAnalysis(allAnalyses[analysis]),
+                );
+              },
+              separatorBuilder: (_, __) => const Divider(
+                    height: 10,
+                  ),
+              itemCount: allAnalyses.length),
+        ),
       ),
-      backgroundColor: const Color.fromARGB(255, 243, 242, 242),
+      backgroundColor: Colors.white,
     );
   }
 }

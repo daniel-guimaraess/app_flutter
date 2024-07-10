@@ -12,49 +12,44 @@ class GeminiService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
 
-    try {
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {'Authorization': 'Bearer $_token'},
-      );
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {'Authorization': 'Bearer $_token'},
+    );
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> json = jsonDecode(response.body);
-        String prompt = json['prompt'];
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> json = jsonDecode(response.body);
+      String prompt = json['prompt'];
 
-        if (prompt.isNotEmpty) {
-          try {
-            final response = await gemini.text(prompt);
-            final resp = response?.output;
+      if (prompt.isNotEmpty) {
+        final response = await gemini.text(prompt);
+        final resp = response?.output;
 
-            if (resp != null) {
-              final res = resp.replaceAll('*', '');
+        if (resp != null) {
+          final res = resp.replaceAll('*', '');
 
-              final responseSave = await http.post(
-                Uri.parse('http://192.168.15.4/analyses'),
-                body: jsonEncode({'analysis': res}),
-                headers: {'Authorization': 'Bearer $_token'},
-              );
+          final responseSave = await http.post(
+            Uri.parse('http://192.168.15.4/api/analyses'),
+            body: jsonEncode({'analysis': res.toString()}),
+            headers: {
+              'Authorization': 'Bearer $_token',
+              'Content-Type': 'application/json',
+            },
+          );
 
-              if (responseSave.statusCode == 200) {
-                return res;
-              } else {
-                throw Exception('Erro ao salvar análise');
-              }
-            } else {
-              throw Exception('Resposta do Gemini é nula');
-            }
-          } catch (e) {
-            throw Exception('Erro ao buscar análise do Gemini: $e');
+          if (responseSave.statusCode == 200) {
+            return res;
+          } else {
+            return 'Não foi possível salvar a análise';
           }
         } else {
-          throw Exception('Alertas vazios');
+          return 'Não foi possível retornar a análise';
         }
       } else {
-        throw Exception('Falha ao carregar alertas: ${response.statusCode}');
+        return 'Não foi possível realizar análise, pois não há alertas hoje';
       }
-    } catch (e) {
-      throw Exception('Erro na requisição HTTP: $e');
+    } else {
+      return 'Não foi possível realizar análise';
     }
   }
 }

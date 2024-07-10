@@ -39,13 +39,12 @@ class _HomePageState extends State<HomePage> {
   void viewAlert(Alert alert) {
     showModalBottomSheet<void>(
       context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
+      isScrollControlled: true,
       builder: (BuildContext context) {
         return Container(
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(15.0),
           color: const Color.fromARGB(255, 243, 242, 242),
+          height: 500,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                 height: 250,
                 width: double.infinity,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(15),
                   child: Image.network(
                     alert.img,
                     fit: BoxFit.cover,
@@ -62,27 +61,43 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 20),
-              Text(
-                'Alerta: ${alert.detection}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
+              Container(
+                height: 150,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(0xff359ac6),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Nível de confiança do alerta: ${alert.confidence}%',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Data: ${alert.date}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black87,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Descrição: ${alert.detection}',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Nível de confiança da detecção: ${alert.confidence}%',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Data: ${alert.date}',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -128,11 +143,12 @@ class _HomePageState extends State<HomePage> {
         title: Text(
           'Bem vindo, ${userName ?? ''}!',
           style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
+            color: Colors.white,
+            fontWeight: FontWeight.w400,
+            fontSize: 18,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 243, 242, 242),
+        backgroundColor: const Color(0xff359ac6),
         elevation: 0.0,
       ),
       body: RefreshIndicator(
@@ -146,94 +162,84 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    width: squareSize,
-                    height: squareSize,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Alertas hoje',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          countAlertsToday?.toString() ?? 'Falha',
-                          style: const TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () {
-                    viewAllAlerts();
-                  },
-                ),
-                GestureDetector(
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    width: squareSize,
-                    height: squareSize,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Análises hoje',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          countAnalysesToday?.toString() ?? 'Falha',
-                          style: const TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () {
-                    viewAllAnalyses();
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 25),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25),
+            Container(
+              color: const Color(0xff359ac6),
+              height: 180,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                    'Últimos alertas',
-                    style: TextStyle(fontSize: 16),
+                  GestureDetector(
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      width: squareSize,
+                      height: squareSize,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Alertas hoje',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Color.fromARGB(255, 61, 61, 61)),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            countAlertsToday?.toString() ?? 'Falha',
+                            style: const TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      viewAllAlerts();
+                    },
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      width: squareSize,
+                      height: squareSize,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Análises hoje',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Color.fromARGB(255, 61, 61, 61)),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            countAnalysesToday?.toString() ?? 'Falha',
+                            style: const TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      viewAllAnalyses();
+                    },
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
             Expanded(
               child: ListView.separated(
                 itemBuilder: (BuildContext context, int alert) {
@@ -258,26 +264,57 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 80, right: 80, bottom: 50),
+              padding: const EdgeInsets.only(left: 90, right: 90, bottom: 20),
               child: GestureDetector(
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color.fromARGB(255, 253, 94, 147),
-                        Color.fromARGB(255, 0, 136, 248),
+                child: Material(
+                  elevation: 2,
+                  borderRadius: BorderRadius.circular(15),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.white),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.videocam_outlined,
+                          color: Color.fromARGB(255, 180, 39, 29),
+                        ),
+                        Text('  Monitoramento',
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Color.fromARGB(255, 61, 61, 61))),
                       ],
                     ),
                   ),
-                  child: const Text(
-                    'ANÁLISE GEMINI AI',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                ),
+                onTap: () {},
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 100, right: 100, bottom: 15),
+              child: GestureDetector(
+                child: Material(
+                  elevation: 2,
+                  borderRadius: BorderRadius.circular(15),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 250, 0, 83),
+                          Color.fromARGB(255, 0, 89, 255),
+                        ],
+                      ),
+                    ),
+                    child: const Text(
+                      'Análise Gemini AI',
+                      style: TextStyle(fontSize: 15, color: Colors.white),
+                    ),
                   ),
                 ),
                 onTap: () {
@@ -288,7 +325,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 243, 242, 242),
+      backgroundColor: Colors.white,
     );
   }
 }

@@ -28,22 +28,15 @@ class _SplashPageState extends State<SplashPage>
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromARGB(255, 75, 63, 243),
-              Color.fromARGB(255, 19, 8, 172),
+              Color(0xff359ac6),
+              Color(0xffb3c8e7),
             ],
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
           ),
         ),
-        child: const Center(
-          child: Text(
-            'Bem-vindo!',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+        child: Center(
+          child: Image.asset('images/logo.png'),
         ),
       ),
     );
