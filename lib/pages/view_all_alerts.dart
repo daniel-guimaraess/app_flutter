@@ -112,9 +112,9 @@ class _ViewAllAlertsState extends State<ViewAllAlerts> {
               itemBuilder: (BuildContext context, int alert) {
                 return ListTile(
                   leading: SizedBox(
-                    width: 50,
+                    width: 60,
                     height: 60,
-                    child: Image.network(allAlerts[alert].img),
+                    child: ClipOval(child: Image.network(allAlerts[alert].img)),
                   ),
                   title: Text(
                     allAlerts[alert].detection,

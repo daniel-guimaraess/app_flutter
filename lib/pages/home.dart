@@ -246,7 +246,10 @@ class _HomePageState extends State<HomePage> {
                   return ListTile(
                     leading: SizedBox(
                       width: 50,
-                      child: Image.network(lastAlerts[alert].img),
+                      height: 50,
+                      child: ClipOval(
+                        child: Image.network(lastAlerts[alert].img),
+                      ),
                     ),
                     title: Text(
                       lastAlerts[alert].detection,
