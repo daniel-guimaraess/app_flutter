@@ -1,10 +1,12 @@
 import 'package:app/models/alert.dart';
+import 'package:app/pages/gemini_analyses.dart';
 import 'package:app/pages/view_all_alerts.dart';
 import 'package:app/pages/view_all_analyses.dart';
 import 'package:app/repositories/alert_repository.dart';
 import 'package:app/repositories/analysis_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,6 +21,20 @@ class _HomePageState extends State<HomePage> {
   int? countAlertsToday;
   late AnalysisRepository analyses;
   int? countAnalysesToday;
+  String? userName;
+
+  @override
+  void initState() {
+    super.initState();
+    getName();
+  }
+
+  void getName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userName = prefs.getString('user_name');
+    });
+  }
 
   void viewAlert(Alert alert) {
     showModalBottomSheet<void>(
@@ -90,6 +106,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  geminiAnalysesToday() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const GeminiAnalyses()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -102,9 +125,9 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Bem vindo, Daniel!',
-          style: TextStyle(
+        title: Text(
+          'Bem vindo, ${userName ?? ''}!',
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 16,
           ),
@@ -236,25 +259,30 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 80, right: 80, bottom: 50),
-              child: Container(
-                alignment: Alignment.center,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color.fromARGB(255, 253, 94, 147),
-                      Color.fromARGB(255, 0, 136, 248),
-                    ],
+              child: GestureDetector(
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color.fromARGB(255, 253, 94, 147),
+                        Color.fromARGB(255, 0, 136, 248),
+                      ],
+                    ),
+                  ),
+                  child: const Text(
+                    'ANÁLISE GEMINI AI',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
-                child: const Text(
-                  'ANÁLISE GEMINI AI',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
+                onTap: () {
+                  geminiAnalysesToday();
+                },
               ),
             ),
           ],

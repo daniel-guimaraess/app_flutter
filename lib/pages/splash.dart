@@ -63,7 +63,7 @@ class _SplashPageState extends State<SplashPage>
       final expiryDate = DateTime.parse(expiryDateStr);
       final now = DateTime.now();
 
-      if (now.isBefore(expiryDate)) {
+      if (now.isBefore(expiryDate.add(const Duration(days: 1)))) {
         // ignore: use_build_context_synchronously
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const HomePage()),

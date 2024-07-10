@@ -21,20 +21,23 @@ class _ViewAnalysisState extends State<ViewAnalysis> {
         ),
         backgroundColor: const Color.fromARGB(255, 243, 242, 242),
       ),
-      body: const Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(20),
-            child: SizedBox(
-              height: 250,
-              width: double.infinity,
+      body: Container(
+        alignment: Alignment.topLeft,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Data: ${widget.analysis.date}'),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text('Análise: ${widget.analysis.analysis}')
+              ],
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
-          Column(),
-        ],
+        ),
       ),
       backgroundColor: const Color.fromARGB(255, 243, 242, 242),
     );

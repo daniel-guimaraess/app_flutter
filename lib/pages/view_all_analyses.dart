@@ -52,10 +52,9 @@ class _ViewAllAnalysesState extends State<ViewAllAnalyses> {
                   child: Image.asset('images/icons/google-gemini-icon.png'),
                 ),
                 title: Text(
-                  allAnalyses[analysis].analysis,
+                  allAnalyses[analysis].date,
                   style: const TextStyle(fontSize: 14),
                 ),
-                trailing: Text(allAnalyses[analysis].date),
                 onTap: () => viewAnalysis(allAnalyses[analysis]),
               );
             },
