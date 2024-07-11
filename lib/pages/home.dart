@@ -4,6 +4,7 @@ import 'package:app/pages/view_all_alerts.dart';
 import 'package:app/pages/view_all_analyses.dart';
 import 'package:app/repositories/alert_repository.dart';
 import 'package:app/repositories/analysis_repository.dart';
+import 'package:app/repositories/monitoring_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +23,8 @@ class _HomePageState extends State<HomePage> {
   late AnalysisRepository analyses;
   int? countAnalysesToday;
   String? userName;
+  late MonitoringRepository getStatus;
+  bool? status;
 
   @override
   void initState() {
@@ -107,6 +110,78 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void viewMonitoring(bool? currentStatus) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        final monitoringRepo =
+            Provider.of<MonitoringRepository>(context, listen: false);
+
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(30.0),
+                  width: double.infinity,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: Colors.white,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Switch(
+                        value: currentStatus ?? false,
+                        onChanged: (value) async {
+                          setState(() {
+                            currentStatus = value;
+                          });
+
+                          if (value) {
+                            await monitoringRepo.enableMonitoring();
+                          } else {
+                            await monitoringRepo.disableMonitoring();
+                          }
+
+                          await monitoringRepo.getStatus();
+                          setState(() {
+                            currentStatus = monitoringRepo.status;
+                          });
+                        },
+                        activeColor: const Color(0xff359ac6),
+                        inactiveThumbColor: Colors.grey,
+                        inactiveTrackColor: Colors.grey.withOpacity(0.5),
+                      ),
+                      Text(
+                        currentStatus == true
+                            ? 'Monitoramento habilitado'
+                            : 'Monitoramento desabilitado',
+                      )
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    await monitoringRepo.getStatus();
+                    setState(() {
+                      currentStatus = monitoringRepo.status;
+                    });
+                  },
+                  child: const Text(
+                    'Atualizar Status',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   viewAllAlerts() {
     Navigator.push(
       context,
@@ -137,6 +212,8 @@ class _HomePageState extends State<HomePage> {
     countAlertsToday = alerts.countAlertsToday;
     analyses = context.watch<AnalysisRepository>();
     countAnalysesToday = analyses.countAnalysesToday;
+    getStatus = context.watch<MonitoringRepository>();
+    status = getStatus.status;
 
     return Scaffold(
       appBar: AppBar(
@@ -293,7 +370,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  viewMonitoring(status);
+                },
               ),
             ),
             Padding(
