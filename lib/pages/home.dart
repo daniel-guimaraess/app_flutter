@@ -1,9 +1,9 @@
 import 'package:app/models/alert.dart';
 import 'package:app/pages/gemini_analyses.dart';
-import 'package:app/pages/view_all_alerts.dart';
-import 'package:app/pages/view_all_analyses.dart';
+import 'package:app/pages/view_all_alerts_today.dart';
+import 'package:app/pages/view_all_analytics_today.dart';
 import 'package:app/repositories/alert_repository.dart';
-import 'package:app/repositories/analysis_repository.dart';
+import 'package:app/repositories/analytics_repository.dart';
 import 'package:app/repositories/monitoring_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,8 +20,8 @@ class _HomePageState extends State<HomePage> {
   late List<Alert> lastAlerts;
   late AlertRepository alerts;
   int? countAlertsToday;
-  late AnalysisRepository analyses;
-  int? countAnalysesToday;
+  late AnalyticsRepository analytics;
+  int? countAnalyticsToday;
   String? userName;
   late MonitoringRepository getStatus;
   bool? status;
@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xff359ac6),
+                  color: const Color.fromARGB(255, 6, 61, 124),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -185,14 +185,14 @@ class _HomePageState extends State<HomePage> {
   viewAllAlerts() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const ViewAllAlerts()),
+      MaterialPageRoute(builder: (_) => const ViewAllAlertsToday()),
     );
   }
 
   viewAllAnalyses() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const ViewAllAnalyses()),
+      MaterialPageRoute(builder: (_) => const ViewAllAnalyticsToday()),
     );
   }
 
@@ -210,8 +210,8 @@ class _HomePageState extends State<HomePage> {
     alerts = context.watch<AlertRepository>();
     lastAlerts = alerts.lastAlerts;
     countAlertsToday = alerts.countAlertsToday;
-    analyses = context.watch<AnalysisRepository>();
-    countAnalysesToday = analyses.countAnalysesToday;
+    analytics = context.watch<AnalyticsRepository>();
+    countAnalyticsToday = analytics.countAnalyticsToday;
     getStatus = context.watch<MonitoringRepository>();
     status = getStatus.status;
 
@@ -225,13 +225,14 @@ class _HomePageState extends State<HomePage> {
             fontSize: 18,
           ),
         ),
-        backgroundColor: const Color(0xff359ac6),
+        backgroundColor: const Color.fromARGB(255, 6, 61, 124),
         elevation: 0.0,
+        centerTitle: true,
       ),
       body: RefreshIndicator(
         onRefresh: () {
           alerts.checkAlerts();
-          analyses.checkAnalyses();
+          analytics.checkAnalytics();
           return Future.value();
         },
         color: Colors.black,
@@ -240,7 +241,9 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              color: const Color(0xff359ac6),
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 6, 61, 124),
+              ),
               height: 180,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -300,7 +303,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            countAnalysesToday?.toString() ?? 'Falha',
+                            countAnalyticsToday?.toString() ?? 'Falha',
                             style: const TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
@@ -322,9 +325,10 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (BuildContext context, int alert) {
                   return ListTile(
                     leading: SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: ClipOval(
+                      width: 60,
+                      height: 60,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
                         child: Image.network(lastAlerts[alert].img),
                       ),
                     ),
@@ -344,7 +348,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 90, right: 90, bottom: 20),
+              padding: const EdgeInsets.only(left: 90, right: 90, bottom: 12),
               child: GestureDetector(
                 child: Material(
                   elevation: 2,

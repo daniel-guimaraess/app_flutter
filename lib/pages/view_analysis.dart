@@ -23,7 +23,7 @@ class _ViewAnalysisState extends State<ViewAnalysis> {
             fontSize: 18,
           ),
         ),
-        backgroundColor: const Color(0xff359ac6),
+        backgroundColor: const Color.fromARGB(255, 6, 61, 124),
       ),
       body: Container(
         alignment: Alignment.topLeft,

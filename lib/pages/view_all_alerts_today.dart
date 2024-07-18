@@ -1,17 +1,18 @@
 import 'package:app/models/alert.dart';
+import 'package:app/pages/view_all_alerts.dart';
 import 'package:app/repositories/alert_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ViewAllAlerts extends StatefulWidget {
-  const ViewAllAlerts({super.key});
+class ViewAllAlertsToday extends StatefulWidget {
+  const ViewAllAlertsToday({super.key});
 
   @override
-  State<ViewAllAlerts> createState() => _ViewAllAlertsState();
+  State<ViewAllAlertsToday> createState() => _ViewAllAlertsTodayState();
 }
 
-class _ViewAllAlertsState extends State<ViewAllAlerts> {
-  late List<Alert> allAlerts;
+class _ViewAllAlertsTodayState extends State<ViewAllAlertsToday> {
+  late List<Alert> allAlertsToday;
   late AlertRepository alerts;
 
   void viewAlert(Alert alert) {
@@ -88,13 +89,13 @@ class _ViewAllAlertsState extends State<ViewAllAlerts> {
   @override
   Widget build(BuildContext context) {
     alerts = context.watch<AlertRepository>();
-    allAlerts = alerts.allAlerts;
+    allAlertsToday = alerts.allAlertsToday;
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          'Todos alertas',
+          'Alertas hoje',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w400,
@@ -116,23 +117,37 @@ class _ViewAllAlertsState extends State<ViewAllAlerts> {
                     height: 60,
                     child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.network(allAlerts[alert].img)),
+                        child: Image.network(allAlertsToday[alert].img)),
                   ),
                   title: Text(
-                    allAlerts[alert].detection,
+                    allAlertsToday[alert].detection,
                     style: const TextStyle(fontSize: 14),
                   ),
-                  trailing: Text(allAlerts[alert].date),
-                  onTap: () => viewAlert(allAlerts[alert]),
+                  trailing: Text(allAlertsToday[alert].date),
+                  onTap: () => viewAlert(allAlertsToday[alert]),
                 );
               },
               separatorBuilder: (_, __) => const Divider(
                     height: 10,
                   ),
-              itemCount: allAlerts.length),
+              itemCount: allAlertsToday.length),
         ),
       ),
       backgroundColor: Colors.white,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ViewAllAlerts()),
+          );
+        },
+        label: const Text(
+          'Ver todos alertas',
+          style: TextStyle(color: Colors.white, fontSize: 15),
+        ),
+        backgroundColor: const Color.fromARGB(255, 6, 61, 124),
+      ),
     );
   }
 }

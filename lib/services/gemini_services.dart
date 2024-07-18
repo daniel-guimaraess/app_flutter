@@ -8,7 +8,7 @@ class GeminiService {
   String? _token;
 
   Future<String> fetchAnalysis() async {
-    String url = 'http://192.168.15.4/api/allalertstoday';
+    String url = 'http://192.168.15.4/api/allalertstodaygemini';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
 
@@ -29,7 +29,7 @@ class GeminiService {
           final res = resp.replaceAll('*', '');
 
           final responseSave = await http.post(
-            Uri.parse('http://192.168.15.4/api/analyses'),
+            Uri.parse('http://192.168.15.4/api/analytics'),
             body: jsonEncode({'analysis': res.toString()}),
             headers: {
               'Authorization': 'Bearer $_token',

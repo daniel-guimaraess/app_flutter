@@ -35,7 +35,7 @@ class _GeminiAnalysesState extends State<GeminiAnalyses> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xff359ac6),
+        backgroundColor: const Color.fromARGB(255, 6, 61, 124),
       ),
       body: Container(
         alignment: Alignment.topLeft,

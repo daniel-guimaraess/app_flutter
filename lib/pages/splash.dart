@@ -25,18 +25,9 @@ class _SplashPageState extends State<SplashPage>
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color(0xff359ac6),
-              Color(0xffb3c8e7),
-            ],
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-          ),
-        ),
+        decoration: const BoxDecoration(color: Color(0xff012044)),
         child: Center(
-          child: Image.asset('images/logo.png'),
+          child: Image.asset('images/logo.jpeg'),
         ),
       ),
     );

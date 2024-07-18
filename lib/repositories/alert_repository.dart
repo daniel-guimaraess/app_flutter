@@ -8,6 +8,9 @@ class AlertRepository extends ChangeNotifier {
   List<Alert> _allAlerts = [];
   List<Alert> get allAlerts => _allAlerts;
 
+  List<Alert> _allAlertsToday = [];
+  List<Alert> get allAlertsToday => _allAlertsToday;
+
   List<Alert> _lastAlerts = [];
   List<Alert> get lastAlerts => _lastAlerts;
 
@@ -19,6 +22,7 @@ class AlertRepository extends ChangeNotifier {
 
   AlertRepository() {
     _getAllAlerts();
+    _getAllAlertsToday();
     _getLastAlerts();
     _getCountAlerts();
   }
@@ -27,6 +31,7 @@ class AlertRepository extends ChangeNotifier {
 
   checkAlerts() async {
     await _getAllAlerts();
+    await _getAllAlertsToday();
     await _getLastAlerts();
     await _getCountAlerts();
   }
@@ -62,6 +67,42 @@ class AlertRepository extends ChangeNotifier {
       }
     } catch (e) {
       _allAlerts = [];
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  _getAllAlertsToday() async {
+    String url = 'http://192.168.15.4/api/allalertstoday';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _token = prefs.getString('jwt_token');
+    _setLoading(true);
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': 'Bearer $_token'},
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> json = jsonDecode(response.body);
+        _allAlertsToday = json.map((alertJson) {
+          return Alert(
+            id: alertJson['id'],
+            type: alertJson['type'],
+            detection: alertJson['detection'],
+            confidence: (alertJson['confidence'] as num).toDouble(),
+            img: alertJson['img_url'],
+            date: alertJson['created_at'],
+          );
+        }).toList();
+        notifyListeners();
+      } else {
+        _allAlertsToday = [];
+        throw Exception('Failed to load alerts');
+      }
+    } catch (e) {
+      _allAlertsToday = [];
     } finally {
       _setLoading(false);
     }
