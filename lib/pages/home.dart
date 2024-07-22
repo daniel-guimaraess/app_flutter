@@ -1,4 +1,5 @@
 import 'package:app/models/alert.dart';
+import 'package:app/pages/chart_all_alerts.dart';
 import 'package:app/pages/gemini_analyses.dart';
 import 'package:app/pages/view_all_alerts_today.dart';
 import 'package:app/pages/view_all_analyses_today.dart';
@@ -40,6 +41,27 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void viewAllAlertsToday() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ViewAllAlertsToday()),
+    );
+  }
+
+  void viewAllAnalysesToday() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ViewAllAnalysesToday()),
+    );
+  }
+
+  void geminiAnalysesToday() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const GeminiAnalyses()),
+    );
+  }
+
   void viewAlert(Alert alert) {
     showModalBottomSheet<void>(
       context: context,
@@ -73,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromARGB(255, 6, 61, 124),
+                  color: const Color.fromARGB(255, 77, 75, 134),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -114,96 +136,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void viewMonitoring(bool? currentStatus) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        final monitoringRepo =
-            Provider.of<MonitoringRepository>(context, listen: false);
-
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(30.0),
-                  width: double.infinity,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: Colors.white,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Switch(
-                        value: currentStatus ?? false,
-                        onChanged: (value) async {
-                          if (mounted) {
-                            setState(() {
-                              currentStatus = value;
-                            });
-                          }
-
-                          if (value) {
-                            await monitoringRepo.enableMonitoring();
-                          } else {
-                            await monitoringRepo.disableMonitoring();
-                          }
-
-                          await monitoringRepo.getStatus();
-
-                          if (mounted) {
-                            setState(() {
-                              currentStatus = monitoringRepo.status;
-                            });
-                          }
-                        },
-                        activeColor: const Color(0xff359ac6),
-                        inactiveThumbColor: Colors.grey,
-                        inactiveTrackColor: Colors.grey.withOpacity(0.5),
-                      ),
-                      Text(
-                        currentStatus == true
-                            ? 'Monitoramento habilitado'
-                            : 'Monitoramento desabilitado',
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  viewAllAlertsToday() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const ViewAllAlertsToday()),
-    );
-  }
-
-  viewAllAnalysesToday() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const ViewAllAnalysesToday()),
-    );
-  }
-
-  geminiAnalysesToday() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const GeminiAnalyses()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final squareSize = screenWidth * 0.4;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final squareSize = screenWidth * 0.35;
     alerts = context.watch<AlertRepository>();
     lastAlerts = alerts.lastAlerts;
     countAlertsToday = alerts.countAlertsToday;
@@ -222,190 +159,155 @@ class _HomePageState extends State<HomePage> {
             fontSize: 18,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 6, 61, 124),
+        backgroundColor: const Color.fromARGB(255, 77, 75, 134),
         elevation: 0.0,
         centerTitle: true,
       ),
       body: RefreshIndicator(
-        onRefresh: () {
+        onRefresh: () async {
           alerts.checkAlerts();
           analyses.checkAnalyses();
-          return Future.value();
         },
         color: Colors.black,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 6, 61, 124),
-              ),
-              height: 180,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    child: Container(
-                      alignment: Alignment.topCenter,
-                      width: squareSize,
-                      height: squareSize,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Alertas hoje',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Color.fromARGB(255, 61, 61, 61)),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            countAlertsToday?.toString() ?? 'Falha',
-                            style: const TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    onTap: () {
-                      viewAllAlertsToday();
-                    },
-                  ),
-                  GestureDetector(
-                    child: Container(
-                      alignment: Alignment.topCenter,
-                      width: squareSize,
-                      height: squareSize,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Análises hoje',
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Color.fromARGB(255, 61, 61, 61)),
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            countAnalysesToday?.toString() ?? 'Falha',
-                            style: const TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    onTap: () {
-                      viewAllAnalysesToday();
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.separated(
-                itemBuilder: (BuildContext context, int alert) {
-                  return ListTile(
-                    leading: SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(lastAlerts[alert].img),
-                      ),
-                    ),
-                    title: Text(
-                      lastAlerts[alert].detection,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    trailing: Text(lastAlerts[alert].date),
-                    onTap: () => viewAlert(lastAlerts[alert]),
-                  );
-                },
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                separatorBuilder: (_, __) => const Divider(
-                  height: 5,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 77, 75, 134),
                 ),
-                itemCount: lastAlerts.length,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 90, right: 90, bottom: 12),
-              child: GestureDetector(
-                child: Material(
-                  elevation: 2,
-                  borderRadius: BorderRadius.circular(15),
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.white),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.videocam_outlined,
-                          color: Color.fromARGB(255, 180, 39, 29),
+                height: screenHeight * 0.25,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      child: Container(
+                        alignment: Alignment.topCenter,
+                        width: squareSize,
+                        height: squareSize,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        Text('  Monitoramento',
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Color.fromARGB(255, 61, 61, 61))),
-                      ],
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  viewMonitoring(status);
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 100, right: 100, bottom: 30),
-              child: GestureDetector(
-                child: Material(
-                  elevation: 2,
-                  borderRadius: BorderRadius.circular(15),
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 250, 0, 83),
-                          Color.fromARGB(255, 0, 89, 255),
-                        ],
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Alertas',
+                              style: TextStyle(
+                                  fontSize: 14, color: Color(0xff7472b2)),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              countAlertsToday?.toString() ?? 'Falha',
+                              style: const TextStyle(
+                                color: Color(0xff5e5d9f),
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                      onTap: () {
+                        viewAllAlertsToday();
+                      },
                     ),
-                    child: const Text(
-                      'Análise Gemini AI',
-                      style: TextStyle(fontSize: 15, color: Colors.white),
+                    GestureDetector(
+                      child: Container(
+                        alignment: Alignment.topCenter,
+                        width: squareSize,
+                        height: squareSize,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Análises',
+                              style: TextStyle(
+                                  fontSize: 14, color: Color(0xff7472b2)),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              countAnalysesToday?.toString() ?? 'Falha',
+                              style: const TextStyle(
+                                color: Color(0xff5e5d9f),
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        viewAllAnalysesToday();
+                      },
                     ),
-                  ),
+                  ],
                 ),
-                onTap: () {
-                  geminiAnalysesToday();
-                },
               ),
-            ),
-          ],
+              const SizedBox(height: 30),
+              const Padding(
+                padding: EdgeInsets.only(left: 25.0),
+                child: Text(
+                  'Dashboard | Alertas Hoje',
+                  style: TextStyle(color: Color.fromARGB(255, 52, 51, 92)),
+                ),
+              ),
+              const SizedBox(height: 30),
+              const ChartAllAlerts(),
+              const SizedBox(height: 30),
+              const Padding(
+                padding: EdgeInsets.only(left: 25.0),
+                child: Text(
+                  'Últimos alertas',
+                  style: TextStyle(color: Color.fromARGB(255, 52, 51, 92)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                height: screenHeight * 0.45,
+                child: ListView.separated(
+                  itemBuilder: (BuildContext context, int alert) {
+                    return ListTile(
+                      leading: SizedBox(
+                        width: screenWidth * 0.15,
+                        height: screenHeight * 0.15,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.network(lastAlerts[alert].img),
+                        ),
+                      ),
+                      title: Text(
+                        lastAlerts[alert].detection,
+                        style: const TextStyle(
+                            fontSize: 14,
+                            color: Color.fromARGB(255, 52, 51, 92)),
+                      ),
+                      trailing: Text(
+                        lastAlerts[alert].date,
+                        selectionColor: const Color.fromARGB(255, 52, 51, 92),
+                      ),
+                      onTap: () => {viewAlert(lastAlerts[alert])},
+                    );
+                  },
+                  padding: const EdgeInsets.only(left: 15, right: 15),
+                  separatorBuilder: (_, __) => const Divider(
+                    height: 5,
+                    color: Color(0xffb0afd4),
+                  ),
+                  itemCount: lastAlerts.length,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       backgroundColor: Colors.white,

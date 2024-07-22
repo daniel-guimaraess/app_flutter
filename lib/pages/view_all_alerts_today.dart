@@ -49,7 +49,7 @@ class _ViewAllAlertsTodayState extends State<ViewAllAlertsToday> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromARGB(255, 6, 61, 124),
+                  color: const Color.fromARGB(255, 52, 51, 92),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +106,7 @@ class _ViewAllAlertsTodayState extends State<ViewAllAlertsToday> {
             fontSize: 18,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 6, 61, 124),
+        backgroundColor: const Color.fromARGB(255, 77, 75, 134),
       ),
       body: RefreshIndicator(
         onRefresh: () => alerts.checkAlerts(),
@@ -125,9 +125,14 @@ class _ViewAllAlertsTodayState extends State<ViewAllAlertsToday> {
                   ),
                   title: Text(
                     allAlertsToday[alert].detection,
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(
+                        fontSize: 14, color: Color.fromARGB(255, 52, 51, 92)),
                   ),
-                  trailing: Text(allAlertsToday[alert].date),
+                  trailing: Text(
+                    allAlertsToday[alert].date,
+                    style:
+                        const TextStyle(color: Color.fromARGB(255, 52, 51, 92)),
+                  ),
                   onTap: () => viewAlert(allAlertsToday[alert]),
                 );
               },
@@ -150,7 +155,7 @@ class _ViewAllAlertsTodayState extends State<ViewAllAlertsToday> {
           'Ver todos alertas',
           style: TextStyle(color: Colors.white, fontSize: 15),
         ),
-        backgroundColor: const Color.fromARGB(255, 6, 61, 124),
+        backgroundColor: const Color.fromARGB(255, 77, 75, 134),
       ),
     );
   }

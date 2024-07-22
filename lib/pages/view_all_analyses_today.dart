@@ -43,7 +43,7 @@ class _ViewAllAnalysesToday extends State<ViewAllAnalysesToday> {
             fontSize: 18,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 6, 61, 124),
+        backgroundColor: const Color.fromARGB(255, 77, 75, 134),
       ),
       body: RefreshIndicator(
         onRefresh: () => analyses.checkAnalyses(),
@@ -65,9 +65,14 @@ class _ViewAllAnalysesToday extends State<ViewAllAnalysesToday> {
                 ),
                 title: Text(
                   typeAnalysis,
-                  style: const TextStyle(fontSize: 14),
+                  style: const TextStyle(
+                      fontSize: 14, color: Color.fromARGB(255, 52, 51, 92)),
                 ),
-                trailing: Text(analysis.date),
+                trailing: Text(
+                  analysis.date,
+                  style:
+                      const TextStyle(color: Color.fromARGB(255, 52, 51, 92)),
+                ),
                 onTap: () => viewAnalysis(analysis),
               );
             },
@@ -91,7 +96,7 @@ class _ViewAllAnalysesToday extends State<ViewAllAnalysesToday> {
           'Ver todas análises',
           style: TextStyle(color: Colors.white, fontSize: 15),
         ),
-        backgroundColor: const Color.fromARGB(255, 6, 61, 124),
+        backgroundColor: const Color.fromARGB(255, 77, 75, 134),
       ),
     );
   }

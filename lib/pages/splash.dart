@@ -1,4 +1,4 @@
-import 'package:app/pages/home.dart';
+import 'package:app/main.dart';
 import 'package:app/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,10 +31,16 @@ class _SplashPageState extends State<SplashPage>
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(color: Color(0xff012044)),
-        child: Center(
-          child: Image.asset('images/logo.jpeg'),
+        decoration: const BoxDecoration(color: Color.fromARGB(255, 52, 51, 92)),
+        child: const Center(
+          child: Text(
+            'PetVision',
+            style: TextStyle(color: Colors.white, fontSize: 50),
+          ),
         ),
+        // Center(
+        //   child: Image.asset('images/logo.jpeg'),
+        // ),
       ),
     );
   }
@@ -56,7 +62,8 @@ class _SplashPageState extends State<SplashPage>
       if (now.isBefore(expiryDate.add(const Duration(days: 1)))) {
         if (!mounted) return;
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(
+              builder: (context) => const BottomNavigationBarPage()),
         );
       } else {
         if (!mounted) return;

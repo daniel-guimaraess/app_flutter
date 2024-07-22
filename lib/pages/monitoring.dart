@@ -29,7 +29,7 @@ class _MonitoringPageState extends State<MonitoringPage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xff359ac6),
+        backgroundColor: const Color.fromARGB(255, 77, 75, 134),
       ),
       body: Column(
         children: [
@@ -62,7 +62,7 @@ class _MonitoringPageState extends State<MonitoringPage> {
           ),
         ],
       ),
-      backgroundColor: const Color(0xff359ac6),
+      backgroundColor: Colors.white,
     );
   }
 }

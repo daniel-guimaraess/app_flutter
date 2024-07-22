@@ -48,7 +48,7 @@ class _ViewAllAlertsState extends State<ViewAllAlerts> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromARGB(255, 6, 61, 124),
+                  color: const Color.fromARGB(255, 77, 75, 134),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +105,7 @@ class _ViewAllAlertsState extends State<ViewAllAlerts> {
             fontSize: 18,
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 6, 61, 124),
+        backgroundColor: const Color.fromARGB(255, 77, 75, 134),
       ),
       body: RefreshIndicator(
         onRefresh: () => alerts.checkAlerts(),
@@ -124,9 +124,14 @@ class _ViewAllAlertsState extends State<ViewAllAlerts> {
                   ),
                   title: Text(
                     allAlerts[alert].detection,
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(
+                        fontSize: 14, color: Color.fromARGB(255, 52, 51, 92)),
                   ),
-                  trailing: Text(allAlerts[alert].date),
+                  trailing: Text(
+                    allAlerts[alert].date,
+                    style:
+                        const TextStyle(color: Color.fromARGB(255, 52, 51, 92)),
+                  ),
                   onTap: () => viewAlert(allAlerts[alert]),
                 );
               },
