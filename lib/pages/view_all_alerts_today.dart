@@ -3,6 +3,7 @@ import 'package:app/pages/view_all_alerts.dart';
 import 'package:app/repositories/alert_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:widget_zoom/widget_zoom.dart';
 
 class ViewAllAlertsToday extends StatefulWidget {
   const ViewAllAlertsToday({super.key});
@@ -33,9 +34,12 @@ class _ViewAllAlertsTodayState extends State<ViewAllAlertsToday> {
                 width: double.infinity,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
-                  child: Image.network(
-                    alert.img,
-                    fit: BoxFit.cover,
+                  child: WidgetZoom(
+                    heroAnimationTag: 'tag',
+                    zoomWidget: Image.network(
+                      alert.img,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),

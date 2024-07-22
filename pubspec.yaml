@@ -43,6 +43,7 @@ dependencies:
   flutter_gemini: ^2.0.4
   video_player: ^2.9.1
   chewie: ^1.8.1
+  widget_zoom: ^0.0.4
   
 dev_dependencies:
   flutter_test:

@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class GeminiService {
   final Gemini gemini = Gemini.instance;
   String? _token;
 
   Future<String> fetchAnalysis() async {
-    String url = 'http://192.168.15.4/api/allalertstodaygemini';
+    String url = '${dotenv.env['BACKEND_URL']}/api/allalertstodaygemini';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
 
@@ -29,8 +30,9 @@ class GeminiService {
           final res = resp.replaceAll('*', '');
 
           final responseSave = await http.post(
-            Uri.parse('http://192.168.15.4/api/analytics'),
-            body: jsonEncode({'analysis': res.toString()}),
+            Uri.parse('${dotenv.env['BACKEND_URL']}/api/analyses'),
+            body:
+                jsonEncode({'type': 'standalone', 'analysis': res.toString()}),
             headers: {
               'Authorization': 'Bearer $_token',
               'Content-Type': 'application/json',

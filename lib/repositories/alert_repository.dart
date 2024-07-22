@@ -3,6 +3,7 @@ import 'package:app/models/alert.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AlertRepository extends ChangeNotifier {
   List<Alert> _allAlerts = [];
@@ -37,7 +38,7 @@ class AlertRepository extends ChangeNotifier {
   }
 
   _getAllAlerts() async {
-    String url = 'http://192.168.15.4/api/alerts';
+    String url = '${dotenv.env['BACKEND_URL']}/api/alerts';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
     _setLoading(true);
@@ -54,6 +55,7 @@ class AlertRepository extends ChangeNotifier {
           return Alert(
             id: alertJson['id'],
             type: alertJson['type'],
+            petId: alertJson['pet_id'],
             detection: alertJson['detection'],
             confidence: (alertJson['confidence'] as num).toDouble(),
             img: alertJson['img_url'],
@@ -73,7 +75,7 @@ class AlertRepository extends ChangeNotifier {
   }
 
   _getAllAlertsToday() async {
-    String url = 'http://192.168.15.4/api/allalertstoday';
+    String url = '${dotenv.env['BACKEND_URL']}/api/allalertstoday';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
     _setLoading(true);
@@ -90,6 +92,7 @@ class AlertRepository extends ChangeNotifier {
           return Alert(
             id: alertJson['id'],
             type: alertJson['type'],
+            petId: alertJson['pet_id'],
             detection: alertJson['detection'],
             confidence: (alertJson['confidence'] as num).toDouble(),
             img: alertJson['img_url'],
@@ -109,7 +112,7 @@ class AlertRepository extends ChangeNotifier {
   }
 
   _getLastAlerts() async {
-    String url = 'http://192.168.15.4/api/lastalerts';
+    String url = '${dotenv.env['BACKEND_URL']}/api/lastalerts';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
     _setLoading(true);
@@ -126,6 +129,7 @@ class AlertRepository extends ChangeNotifier {
           return Alert(
             id: alertJson['id'],
             type: alertJson['type'],
+            petId: alertJson['pet_id'],
             detection: alertJson['detection'],
             confidence: alertJson['confidence'],
             img: alertJson['img_url'],
@@ -145,7 +149,7 @@ class AlertRepository extends ChangeNotifier {
   }
 
   _getCountAlerts() async {
-    String url = 'http://192.168.15.4/api/countalertstoday';
+    String url = '${dotenv.env['BACKEND_URL']}/api/countalertstoday';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
     _setLoading(true);

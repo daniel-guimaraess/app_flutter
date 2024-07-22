@@ -21,6 +21,12 @@ class _SplashPageState extends State<SplashPage>
   }
 
   @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -48,18 +54,18 @@ class _SplashPageState extends State<SplashPage>
       final now = DateTime.now();
 
       if (now.isBefore(expiryDate.add(const Duration(days: 1)))) {
-        // ignore: use_build_context_synchronously
+        if (!mounted) return;
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const HomePage()),
         );
       } else {
-        // ignore: use_build_context_synchronously
+        if (!mounted) return;
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const LoginPage()),
         );
       }
     } else {
-      // ignore: use_build_context_synchronously
+      if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginPage()),
       );

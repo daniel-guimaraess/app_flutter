@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MonitoringRepository extends ChangeNotifier {
   String? _token;
@@ -17,7 +18,7 @@ class MonitoringRepository extends ChangeNotifier {
   }
 
   Future<void> getStatus() async {
-    String url = 'http://192.168.15.4/api/statusmonitoring';
+    String url = '${dotenv.env['BACKEND_URL']}/api/statusmonitoring';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
 
@@ -38,7 +39,7 @@ class MonitoringRepository extends ChangeNotifier {
   }
 
   Future<void> enableMonitoring() async {
-    String url = 'http://192.168.15.4/api/startmonitoring';
+    String url = '${dotenv.env['BACKEND_URL']}/api/startmonitoring';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
 
@@ -57,7 +58,7 @@ class MonitoringRepository extends ChangeNotifier {
   }
 
   Future<void> disableMonitoring() async {
-    String url = 'http://192.168.15.4/api/stopmonitoring';
+    String url = '${dotenv.env['BACKEND_URL']}/api/stopmonitoring';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
 

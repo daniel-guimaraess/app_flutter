@@ -3,34 +3,35 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class AnalyticsRepository extends ChangeNotifier {
-  List<Analysis> _allAnalytics = [];
-  List<Analysis> get allAnalytics => _allAnalytics;
+class AnalysesRepository extends ChangeNotifier {
+  List<Analysis> _allAnalyses = [];
+  List<Analysis> get allAnalyses => _allAnalyses;
 
-  List<Analysis> _allAnalyticsToday = [];
-  List<Analysis> get allAnalyticsToday => _allAnalyticsToday;
+  List<Analysis> _allAnalysesToday = [];
+  List<Analysis> get allAnalysesToday => _allAnalysesToday;
 
   String? _token;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  int _countAnalyticsToday = 0;
-  int get countAnalyticsToday => _countAnalyticsToday;
+  int _countAnalysesToday = 0;
+  int get countAnalysesToday => _countAnalysesToday;
 
-  AnalyticsRepository() {
-    _getAllAnalytics();
-    _getAllAnalyticsToday();
-    _getCountAnalytics();
+  AnalysesRepository() {
+    _getAllAnalyses();
+    _getAllAnalysesToday();
+    _getCountAnalyses();
   }
 
-  checkAnalytics() async {
-    await _getAllAnalytics();
-    await _getAllAnalyticsToday();
-    await _getCountAnalytics();
+  checkAnalyses() async {
+    await _getAllAnalyses();
+    await _getAllAnalysesToday();
+    await _getCountAnalyses();
   }
 
-  _getAllAnalytics() async {
-    String url = 'http://192.168.15.4/api/analytics';
+  _getAllAnalyses() async {
+    String url = '${dotenv.env['BACKEND_URL']}/api/analyses';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
     _setLoading(true);
@@ -43,27 +44,28 @@ class AnalyticsRepository extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> json = jsonDecode(response.body);
-        _allAnalytics = json.map((alertJson) {
+        _allAnalyses = json.map((alertJson) {
           return Analysis(
             id: alertJson['id'],
+            type: alertJson['type'],
             analysis: alertJson['analysis'],
             date: alertJson['created_at'],
           );
         }).toList();
         notifyListeners();
       } else {
-        _allAnalytics = [];
+        _allAnalyses = [];
         throw Exception('Failed to load analyses');
       }
     } catch (e) {
-      _allAnalytics = [];
+      _allAnalyses = [];
     } finally {
       _setLoading(false);
     }
   }
 
-  _getAllAnalyticsToday() async {
-    String url = 'http://192.168.15.4/api/analytics';
+  _getAllAnalysesToday() async {
+    String url = '${dotenv.env['BACKEND_URL']}/api/allanalysestoday';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
     _setLoading(true);
@@ -76,27 +78,28 @@ class AnalyticsRepository extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final List<dynamic> json = jsonDecode(response.body);
-        _allAnalyticsToday = json.map((alertJson) {
+        _allAnalysesToday = json.map((alertJson) {
           return Analysis(
             id: alertJson['id'],
+            type: alertJson['type'],
             analysis: alertJson['analysis'],
             date: alertJson['created_at'],
           );
         }).toList();
         notifyListeners();
       } else {
-        _allAnalyticsToday = [];
-        throw Exception('Failed to load analytics');
+        _allAnalysesToday = [];
+        throw Exception('Failed to load analyses');
       }
     } catch (e) {
-      _allAnalyticsToday = [];
+      _allAnalysesToday = [];
     } finally {
       _setLoading(false);
     }
   }
 
-  _getCountAnalytics() async {
-    String url = 'http://192.168.15.4/api/countanalyticstoday';
+  _getCountAnalyses() async {
+    String url = '${dotenv.env['BACKEND_URL']}/api/countanalysestoday';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('jwt_token');
     _setLoading(true);
@@ -109,14 +112,14 @@ class AnalyticsRepository extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> json = jsonDecode(response.body);
-        _countAnalyticsToday = json['count'];
+        _countAnalysesToday = json['count'];
         notifyListeners();
       } else {
-        _countAnalyticsToday = 0;
-        throw Exception('Failed to load analytics');
+        _countAnalysesToday = 0;
+        throw Exception('Failed to load analyses');
       }
     } catch (e) {
-      _countAnalyticsToday = 0;
+      _countAnalysesToday = 0;
     } finally {
       _setLoading(false);
     }

@@ -1,13 +1,14 @@
 import 'package:app/models/alert.dart';
 import 'package:app/pages/gemini_analyses.dart';
 import 'package:app/pages/view_all_alerts_today.dart';
-import 'package:app/pages/view_all_analytics_today.dart';
+import 'package:app/pages/view_all_analyses_today.dart';
 import 'package:app/repositories/alert_repository.dart';
-import 'package:app/repositories/analytics_repository.dart';
+import 'package:app/repositories/analyses_repository.dart';
 import 'package:app/repositories/monitoring_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:widget_zoom/widget_zoom.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,8 +21,8 @@ class _HomePageState extends State<HomePage> {
   late List<Alert> lastAlerts;
   late AlertRepository alerts;
   int? countAlertsToday;
-  late AnalyticsRepository analytics;
-  int? countAnalyticsToday;
+  late AnalysesRepository analyses;
+  int? countAnalysesToday;
   String? userName;
   late MonitoringRepository getStatus;
   bool? status;
@@ -57,9 +58,12 @@ class _HomePageState extends State<HomePage> {
                 width: double.infinity,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
-                  child: Image.network(
-                    alert.img,
-                    fit: BoxFit.cover,
+                  child: WidgetZoom(
+                    heroAnimationTag: 'tag',
+                    zoomWidget: Image.network(
+                      alert.img,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -135,9 +139,11 @@ class _HomePageState extends State<HomePage> {
                       Switch(
                         value: currentStatus ?? false,
                         onChanged: (value) async {
-                          setState(() {
-                            currentStatus = value;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              currentStatus = value;
+                            });
+                          }
 
                           if (value) {
                             await monitoringRepo.enableMonitoring();
@@ -146,9 +152,12 @@ class _HomePageState extends State<HomePage> {
                           }
 
                           await monitoringRepo.getStatus();
-                          setState(() {
-                            currentStatus = monitoringRepo.status;
-                          });
+
+                          if (mounted) {
+                            setState(() {
+                              currentStatus = monitoringRepo.status;
+                            });
+                          }
                         },
                         activeColor: const Color(0xff359ac6),
                         inactiveThumbColor: Colors.grey,
@@ -162,18 +171,6 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await monitoringRepo.getStatus();
-                    setState(() {
-                      currentStatus = monitoringRepo.status;
-                    });
-                  },
-                  child: const Text(
-                    'Atualizar Status',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
               ],
             );
           },
@@ -182,17 +179,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  viewAllAlerts() {
+  viewAllAlertsToday() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => const ViewAllAlertsToday()),
     );
   }
 
-  viewAllAnalyses() {
+  viewAllAnalysesToday() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const ViewAllAnalyticsToday()),
+      MaterialPageRoute(builder: (_) => const ViewAllAnalysesToday()),
     );
   }
 
@@ -210,8 +207,8 @@ class _HomePageState extends State<HomePage> {
     alerts = context.watch<AlertRepository>();
     lastAlerts = alerts.lastAlerts;
     countAlertsToday = alerts.countAlertsToday;
-    analytics = context.watch<AnalyticsRepository>();
-    countAnalyticsToday = analytics.countAnalyticsToday;
+    analyses = context.watch<AnalysesRepository>();
+    countAnalysesToday = analyses.countAnalysesToday;
     getStatus = context.watch<MonitoringRepository>();
     status = getStatus.status;
 
@@ -232,7 +229,7 @@ class _HomePageState extends State<HomePage> {
       body: RefreshIndicator(
         onRefresh: () {
           alerts.checkAlerts();
-          analytics.checkAnalytics();
+          analyses.checkAnalyses();
           return Future.value();
         },
         color: Colors.black,
@@ -279,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     onTap: () {
-                      viewAllAlerts();
+                      viewAllAlertsToday();
                     },
                   ),
                   GestureDetector(
@@ -303,7 +300,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            countAnalyticsToday?.toString() ?? 'Falha',
+                            countAnalysesToday?.toString() ?? 'Falha',
                             style: const TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
@@ -313,7 +310,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     onTap: () {
-                      viewAllAnalyses();
+                      viewAllAnalysesToday();
                     },
                   ),
                 ],
@@ -380,7 +377,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 100, right: 100, bottom: 15),
+              padding: const EdgeInsets.only(left: 100, right: 100, bottom: 30),
               child: GestureDetector(
                 child: Material(
                   elevation: 2,

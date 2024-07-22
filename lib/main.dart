@@ -1,6 +1,6 @@
 import 'package:app/pages/splash.dart';
 import 'package:app/repositories/alert_repository.dart';
-import 'package:app/repositories/analytics_repository.dart';
+import 'package:app/repositories/analyses_repository.dart';
 import 'package:app/repositories/monitoring_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
@@ -17,7 +17,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AlertRepository()),
-        ChangeNotifierProvider(create: (context) => AnalyticsRepository()),
+        ChangeNotifierProvider(create: (context) => AnalysesRepository()),
         ChangeNotifierProvider(create: (context) => MonitoringRepository()),
       ],
       child: const MyApp(),

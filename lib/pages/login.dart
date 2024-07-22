@@ -3,6 +3,7 @@ import 'package:app/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -147,7 +148,9 @@ class LoginPage extends StatelessWidget {
 
   Future<void> login(
       BuildContext context, String email, String password) async {
-    final url = Uri.parse('http://192.168.15.4/api/login');
+    await dotenv.load(fileName: '.env');
+
+    final url = Uri.parse('${dotenv.env['BACKEND_URL']}/api/login');
 
     try {
       final response = await http.post(
@@ -162,24 +165,24 @@ class LoginPage extends StatelessWidget {
         final userName = responseData['profile']['name'];
 
         final prefs = await SharedPreferences.getInstance();
-        final expiryDate = DateTime.now().add(const Duration(hours: 3));
+        final expiryDate = DateTime.now().add(const Duration(days: 1));
         await prefs.setString('jwt_token', token);
         await prefs.setString('expiry_date', expiryDate.toIso8601String());
         await prefs.setString('user_name', userName);
 
+        if (!context.mounted) return;
         Navigator.pushReplacement(
-          // ignore: use_build_context_synchronously
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
         );
       } else {
-        // ignore: use_build_context_synchronously
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Falha ao realizar login')),
         );
       }
     } catch (e) {
-      // ignore: use_build_context_synchronously
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Erro de conexão')),
       );
