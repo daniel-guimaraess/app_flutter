@@ -5,7 +5,6 @@ import 'package:app/pages/view_all_alerts_today.dart';
 import 'package:app/pages/view_all_analyses_today.dart';
 import 'package:app/repositories/alert_repository.dart';
 import 'package:app/repositories/analyses_repository.dart';
-import 'package:app/repositories/monitoring_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,8 +24,6 @@ class _HomePageState extends State<HomePage> {
   late AnalysesRepository analyses;
   int? countAnalysesToday;
   String? userName;
-  late MonitoringRepository getStatus;
-  bool? status;
 
   @override
   void initState() {
@@ -146,8 +143,6 @@ class _HomePageState extends State<HomePage> {
     countAlertsToday = alerts.countAlertsToday;
     analyses = context.watch<AnalysesRepository>();
     countAnalysesToday = analyses.countAnalysesToday;
-    getStatus = context.watch<MonitoringRepository>();
-    status = getStatus.status;
 
     return Scaffold(
       appBar: AppBar(

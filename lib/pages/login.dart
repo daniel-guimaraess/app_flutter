@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:app/pages/home.dart';
+import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -120,7 +120,7 @@ class LoginPage extends StatelessWidget {
                       },
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all<Color>(
-                            const Color.fromARGB(255, 5, 85, 177)),
+                            const Color.fromARGB(255, 52, 51, 92)),
                         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -142,7 +142,7 @@ class LoginPage extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: const Color(0xff012044),
+      backgroundColor: const Color.fromARGB(255, 52, 51, 92),
     );
   }
 
@@ -173,7 +173,8 @@ class LoginPage extends StatelessWidget {
         if (!context.mounted) return;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(
+              builder: (context) => const BottomNavigationBarPage()),
         );
       } else {
         if (!context.mounted) return;

@@ -200,7 +200,7 @@ class AlertRepository extends ChangeNotifier {
         throw Exception('Failed to load alerts');
       }
     } catch (e) {
-      throw Exception('Failed to load alerts');
+      _chartData = {};
     } finally {
       _setLoading(false);
     }

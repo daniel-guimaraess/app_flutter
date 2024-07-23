@@ -84,19 +84,22 @@ class ChartAllAlertsState extends State<ChartAllAlerts> {
               const SizedBox(height: 20),
               Stack(
                 children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 108, 107, 156),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Lua',
-                        style: TextStyle(color: Colors.white),
+                  InkWell(
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 108, 107, 156),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Lua',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
+                    onTap: () => {},
                   ),
                 ],
               ),
@@ -109,53 +112,96 @@ class ChartAllAlertsState extends State<ChartAllAlerts> {
 
   List<PieChartSectionData> showingSections() {
     final List<PieChartSectionData> sections = [];
-
-    if (chartData.containsKey('Tinha')) {
-      final sectionData = chartData['Tinha'];
-      final double percentage = (sectionData['percentage'] as num).toDouble();
-      sections.add(
-        PieChartSectionData(
-          color: const Color(0xffaeaed2),
-          value: percentage,
-          title: '${percentage.toStringAsFixed(0)}%',
-          radius: touchedIndex == 0 ? 110.0 : 100.0,
-          titleStyle: TextStyle(
-            fontSize: touchedIndex == 0 ? 20.0 : 16.0,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xffffffff),
-            shadows: const [
-              Shadow(
-                color: Colors.black,
-                blurRadius: 2,
-              )
-            ],
+    if (chartData.isNotEmpty) {
+      if (chartData['Tinha']['percentage'] == 0 &&
+          chartData['Tinha']['percentage'] == 0) {
+        sections.add(
+          PieChartSectionData(
+            color: const Color(0xffaeaed2),
+            value: 50,
+            title: 'Nenhum alerta',
+            radius: touchedIndex == 0 ? 110.0 : 100.0,
+            titleStyle: TextStyle(
+              fontSize: touchedIndex == 0 ? 20.0 : 16.0,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: const [
+                Shadow(
+                  color: Colors.black,
+                  blurRadius: 2,
+                )
+              ],
+            ),
           ),
-        ),
-      );
-    }
-
-    if (chartData.containsKey('Lua')) {
-      final sectionData = chartData['Lua'];
-      final double percentage = (sectionData['percentage'] as num).toDouble();
-      sections.add(
-        PieChartSectionData(
-          color: const Color.fromARGB(255, 108, 107, 156),
-          value: percentage,
-          title: '${percentage.toStringAsFixed(0)}%',
-          radius: touchedIndex == 1 ? 110.0 : 100.0,
-          titleStyle: TextStyle(
-            fontSize: touchedIndex == 1 ? 20.0 : 16.0,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xffffffff),
-            shadows: const [
-              Shadow(
-                color: Colors.black,
-                blurRadius: 2,
-              )
-            ],
+        );
+        sections.add(
+          PieChartSectionData(
+            color: const Color.fromARGB(255, 108, 107, 156),
+            value: 50,
+            title: 'Nenhum alerta',
+            radius: touchedIndex == 1 ? 110.0 : 100.0,
+            titleStyle: TextStyle(
+              fontSize: touchedIndex == 1 ? 20.0 : 16.0,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: const [
+                Shadow(
+                  color: Colors.black,
+                  blurRadius: 2,
+                )
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      }
+      if (chartData.containsKey('Tinha')) {
+        final sectionData = chartData['Tinha'];
+        final double percentage = (sectionData['percentage'] as num).toDouble();
+
+        sections.add(
+          PieChartSectionData(
+            color: const Color(0xffaeaed2),
+            value: percentage,
+            title: '${percentage.toStringAsFixed(0)}%',
+            radius: touchedIndex == 0 ? 110.0 : 100.0,
+            titleStyle: TextStyle(
+              fontSize: touchedIndex == 0 ? 20.0 : 16.0,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: const [
+                Shadow(
+                  color: Colors.black,
+                  blurRadius: 2,
+                )
+              ],
+            ),
+          ),
+        );
+      }
+
+      if (chartData.containsKey('Lua')) {
+        final sectionData = chartData['Lua'];
+        final double percentage = (sectionData['percentage'] as num).toDouble();
+        sections.add(
+          PieChartSectionData(
+            color: const Color.fromARGB(255, 108, 107, 156),
+            value: percentage,
+            title: '${percentage.toStringAsFixed(0)}%',
+            radius: touchedIndex == 1 ? 110.0 : 100.0,
+            titleStyle: TextStyle(
+              fontSize: touchedIndex == 1 ? 20.0 : 16.0,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: const [
+                Shadow(
+                  color: Colors.black,
+                  blurRadius: 2,
+                )
+              ],
+            ),
+          ),
+        );
+      }
     }
 
     return sections;
