@@ -29,19 +29,10 @@ class _SplashPageState extends State<SplashPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: const BoxDecoration(color: Color.fromARGB(255, 52, 51, 92)),
-        child: const Center(
-          child: Text(
-            'PetVision',
-            style: TextStyle(color: Colors.white, fontSize: 50),
-          ),
-        ),
-        // Center(
-        //   child: Image.asset('images/logo.jpeg'),
-        // ),
+      body: Center(
+        child: Image.asset('images/logo.png'),
       ),
+      backgroundColor: const Color.fromARGB(255, 52, 51, 92),
     );
   }
 
