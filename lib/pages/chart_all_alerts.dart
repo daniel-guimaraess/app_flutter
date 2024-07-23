@@ -114,7 +114,7 @@ class ChartAllAlertsState extends State<ChartAllAlerts> {
     final List<PieChartSectionData> sections = [];
     if (chartData.isNotEmpty) {
       if (chartData['Tinha']['percentage'] == 0 &&
-          chartData['Tinha']['percentage'] == 0) {
+          chartData['Lua']['percentage'] == 0) {
         sections.add(
           PieChartSectionData(
             color: const Color(0xffaeaed2),

@@ -1,6 +1,7 @@
 import 'package:app/pages/gemini.dart';
 import 'package:app/pages/monitoring_page.dart';
 import 'package:app/pages/mypets_page.dart';
+import 'package:app/repositories/pet_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:app/pages/home.dart';
 import 'package:app/pages/splash.dart';
@@ -23,6 +24,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => AlertRepository()),
         ChangeNotifierProvider(create: (context) => AnalysesRepository()),
         ChangeNotifierProvider(create: (context) => MonitoringRepository()),
+        ChangeNotifierProvider(create: (context) => PetRepository()),
       ],
       child: const MyApp(),
     ),
