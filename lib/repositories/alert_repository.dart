@@ -15,6 +15,9 @@ class AlertRepository extends ChangeNotifier {
   List<Alert> _lastAlerts = [];
   List<Alert> get lastAlerts => _lastAlerts;
 
+  Map<String, dynamic> _chartData = {};
+  Map<String, dynamic> get chartData => _chartData;
+
   int _countAlertsToday = 0;
   int get countAlertsToday => _countAlertsToday;
 
@@ -26,6 +29,7 @@ class AlertRepository extends ChangeNotifier {
     _getAllAlertsToday();
     _getLastAlerts();
     _getCountAlerts();
+    _getChartData();
   }
 
   bool get isLoading => _isLoading;
@@ -35,6 +39,7 @@ class AlertRepository extends ChangeNotifier {
     await _getAllAlertsToday();
     await _getLastAlerts();
     await _getCountAlerts();
+    await _getChartData();
   }
 
   _getAllAlerts() async {
@@ -170,6 +175,32 @@ class AlertRepository extends ChangeNotifier {
       }
     } catch (e) {
       _countAlertsToday = 0;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  _getChartData() async {
+    String url = '${dotenv.env['BACKEND_URL']}/api/chartdata';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _token = prefs.getString('jwt_token');
+    _setLoading(true);
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': 'Bearer $_token'},
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> json = jsonDecode(response.body);
+        _chartData = json;
+        notifyListeners();
+      } else {
+        throw Exception('Failed to load alerts');
+      }
+    } catch (e) {
+      throw Exception('Failed to load alerts');
     } finally {
       _setLoading(false);
     }
